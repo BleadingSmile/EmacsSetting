@@ -99,6 +99,10 @@
 (setq projectile-switch-project-action 'helm-projectile)
 (setq projectile-enable-caching t)
 
+(require 'helm-ls-git)
+(global-set-key (kbd "<f6>") 'helm-ls-git-ls)
+(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+
 (require 'nyan-mode)
 (nyan-mode)
 
@@ -139,6 +143,7 @@
 (require 'autopair)
 (autopair-global-mode)
 
+(hl-line-mode)
 (global-linum-mode t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -149,10 +154,10 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
- '(custom-enabled-themes (quote (wheatgrass)))
+ '(custom-enabled-themes (quote (suscolors)))
  '(custom-safe-themes
    (quote
-    ("d606ac41cdd7054841941455c0151c54f8bff7e4e050255dbd4ae4d60ab640c1" default))))
+    ("b9b1a8d2ec1d5c17700e1a09256f33c2520b26f49980ed9e217e444c381279a9" "d606ac41cdd7054841941455c0151c54f8bff7e4e050255dbd4ae4d60ab640c1" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
