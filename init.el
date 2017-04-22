@@ -99,6 +99,9 @@
 (setq projectile-switch-project-action 'helm-projectile)
 (setq projectile-enable-caching t)
 
+(require 'helm-descbinds)
+(helm-descbinds-mode)
+
 (require 'helm-ls-git)
 (global-set-key (kbd "<f6>") 'helm-ls-git-ls)
 (global-set-key (kbd "C-x C-d") 'helm-browse-project)
@@ -139,12 +142,78 @@
 
 (require 'cmake-ide)
 (cmake-ide-setup)
+(setq cmake-ide-flags-c++ (append '("-std=c++11")))
+(global-set-key (kbd "C-c m") 'cmake-ide-compile)
 
 (require 'autopair)
 (autopair-global-mode)
 
+(require 'srefactor)
+(require 'srefactor-lisp)
+(semantic-mode 1)
+(define-key c-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)
+(define-key c++-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)
+(setq srefactor-ui-menu-show-help nil)
+
+(require 'clean-aindent-mode)
+(add-hook 'prog-mode-hook 'clean-aindent-mode)
+
+(require 'sr-speedbar)
+(setq sr-speedbar-skip-other-window-p t)
+(setq sr-speedbar-auto-refresh t)
+(setq sr-speedbar-right-side nil)
+(setq sr-speedbar-width 25)
+(global-set-key (kbd "C-c b") 'sr-speedbar-toggle)
+(global-set-key (kbd "C-c c") 'sr-speedbar-select-window)
+(advice-add 'sr-speedbar-open :after #'my-sr-speedbar-open-hook)
+(defun select-next-window ()
+  (other-window 1))
+(defun my-sr-speedbar-open-hook ()
+  (add-hook 'speedbar-before-visiting-file-hook 'select-next-window t)
+  (add-hook 'speedbar-before-visiting-tag-hook 'select-next-window t))
+
+(require 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+
+;;built-in settings
 (hl-line-mode)
 (global-linum-mode t)
+(global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-c s") 'select-line)
+(add-hook 'prog-mode-hook
+	  (lambda () (interactive)
+	    (setq show-trailing-whitespace 1)))
+(setq c-default-style "ellemtel")
+(setq speedbar-show-unknown-files t)
+
+(defun select-current-line()
+  "Select current line."
+  (interactive)
+  (end-of-line)
+  (set-mark (line-beginning-position)))
+
+(defun select-line ()
+  "Select current line. If region is active, extend selection downward by line."
+  (interactive)
+  (if (region-active-p)
+      (progn
+	(forward-line 1)
+	(end-of-line))
+    (select-current-line)))
+
+;not used currently
+(defun cut-line-or-region()
+  "Cut current line, or test selection."
+  (interactive)
+  (if current-prefix-arg
+      (progn
+	(kill-new (buffer-string))
+	(delete-region (point-min) (point-max)))
+    (progn (if (use-region-p)
+	       (kill-region (region-beginning) (region-end) t)
+	     (kill-region (line-beginning-position) (line-beginning-position 2))))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -157,7 +226,8 @@
  '(custom-enabled-themes (quote (suscolors)))
  '(custom-safe-themes
    (quote
-    ("b9b1a8d2ec1d5c17700e1a09256f33c2520b26f49980ed9e217e444c381279a9" "d606ac41cdd7054841941455c0151c54f8bff7e4e050255dbd4ae4d60ab640c1" default))))
+    ("b9b1a8d2ec1d5c17700e1a09256f33c2520b26f49980ed9e217e444c381279a9" "d606ac41cdd7054841941455c0151c54f8bff7e4e050255dbd4ae4d60ab640c1" default)))
+ '(safe-local-variable-values (quote ((cmake-ide-build-dir . build)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
