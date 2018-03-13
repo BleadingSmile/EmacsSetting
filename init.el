@@ -4,6 +4,7 @@
 (package-initialize)
 (require 'use-package)
 
+(require 'groovy-mode)
 (require 'company)
 (global-company-mode)
 
@@ -102,6 +103,22 @@
 (defun my-sr-speedbar-open-hook ()
   (add-hook 'speedbar-before-visiting-file-hook 'select-next-window t)
   (add-hook 'speedbar-before-visiting-tag-hook 'select-next-window t))
+
+(require 'meghanada)
+(add-hook 'java-mode-hook
+	  (lambda ()
+	    (meghanada-mode t)
+	    (flycheck-mode +1)
+	    (setq c-basic-offset 2)
+	    (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
+
+(cond
+ ((eq system-type 'windows-nt)
+  (setq meghanada-java-path (expand-file-name "bin/java.exe" (getenv "JAVA_HOME")))
+  (setq meghanada-maven-path "mvn.cmd"))
+ (t
+  (setq meghanada-java-path "java")
+  (setq meghanada-maven-path "mvn")))
 
 ;;built-in functions
 (hl-line-mode)
