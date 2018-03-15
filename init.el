@@ -121,6 +121,9 @@
   (setq meghanada-maven-path "mvn")))
 
 ;;built-in functions
+(dolist (hook '(text-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+
 (hl-line-mode)
 (global-linum-mode t)
 (global-set-key (kbd "RET") 'newline-and-indent)
