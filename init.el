@@ -120,7 +120,12 @@
   (setq meghanada-java-path "java")
   (setq meghanada-maven-path "mvn")))
 
+(load-theme 'zenburn t)
+
 ;;built-in functions
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(setq browse-url-browser-function 'helm-browse-url-opera)
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 
